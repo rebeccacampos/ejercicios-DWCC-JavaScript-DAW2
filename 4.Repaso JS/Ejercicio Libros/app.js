@@ -48,6 +48,8 @@ const librosIniciales = [
   },
 ];
 
+// Bloque 1: Datos y Strings (TODO 01 al 10)
+
 // TODO 01 — Copiar un array con spread.
 // TEORÍA: asignar un array a otra variable comparte su referencia. [...array]
 // crea otro array, pero conserva las referencias de los objetos que contiene.
@@ -236,7 +238,7 @@ function analizarTexto(texto) {
   // una copia del texto sin espacios exteriores y en minúsculas. Comprueba
   // el prefijo "javascript", el sufijo ".pdf" y la posición de "dom".
   // COMPRUEBA: " JavaScript DOM.pdf " produce true, true y 11 respectivamente.
-  
+
   let limpio = texto.trim().toLowerCase();
 
   return {
@@ -250,6 +252,7 @@ function analizarTexto(texto) {
 console.log(analizarTexto(" JavaScript DOM.pdf "))
 
 
+// Bloque 2: Objetos y Arrays (TODO 11 al 20)
 
 function quitarId(libro) {
   // TODO 11 — Rest en objetos.
@@ -257,8 +260,12 @@ function quitarId(libro) {
   // Spread expande; rest recoge. delete, en cambio, modificaría el objeto destino.
   // OBJETIVO: devuelve otro objeto sin id, conservando el original intacto.
   // PISTA: extrae id y devuelve el resto. No uses delete sobre libro.
-  return {};
+
+  let {id, ...resto} = libro;
+  return resto;
 }
+
+console.log(quitarId(libros[0]))
 
 
 
@@ -268,8 +275,16 @@ function inspeccionarObjeto(libro) {
   // si una propiedad pertenece al propio objeto, aunque su valor sea undefined.
   // OBJETIVO: devuelve { claves, valores, entradas, tienePrecio }.
   // COMPRUEBA: para { precio: 0 }, obtienes ["precio"], [0], [["precio", 0]], true.
-  return { claves: [], valores: [], entradas: [], tienePrecio: false };
+
+  return { 
+    claves: Object.keys(libro), 
+    valores: Object.values(libro), 
+    entradas: Object.entries(libro), 
+    tienePrecio: Object.hasOwn(libro, "precio") };
 }
+
+console.log(inspeccionarObjeto(libros[1]))
+
 
 function obtenerIdioma(libro) {
   // TODO 13 — Acceso opcional ?. y valor alternativo ??.
@@ -277,8 +292,12 @@ function obtenerIdioma(libro) {
   // solo ante null/undefined. || también reemplazaría 0, false y "".
   // OBJETIVO: lee detalles.idioma, o devuelve "Sin especificar" si falta.
   // COMPRUEBA: obtenerIdioma({}) no lanza errores; un idioma "" se conserva.
-  return "Sin especificar";
+
+  return libro.detalles?.idioma ?? "Sin especificar";
 }
+
+console.log(obtenerIdioma(libros[2]))
+
 
 function explorarCopia(libro) {
   // TODO 14 — Referencias y copia superficial.
@@ -365,6 +384,10 @@ const elementos = {
   sinResultados: null,
   mensaje: null,
 };
+
+
+
+// Bloque 3: DOM y Eventos (TODO 21 al 32)
 
 function conectarDOM() {
   // TODO 21 — querySelector y referencias al DOM.
