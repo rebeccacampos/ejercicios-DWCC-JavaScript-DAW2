@@ -126,7 +126,7 @@ function prepararLibros(datos) {
   // TEORÍA: map devuelve un array nuevo, con un resultado por elemento.
   // OBJETIVO: aplica normalizarLibro a cada libro y devuelve el nuevo array.
   // COMPRUEBA: prepararLibros(librosIniciales)[0].etiquetas es un array.
-  return datos;
+  return datos.map(normalizarLibro);
 }
 
 function resumirTitulo(titulo, limite = 24) {
@@ -136,8 +136,14 @@ function resumirTitulo(titulo, limite = 24) {
   // OBJETIVO: si supera limite, devuelve los primeros limite caracteres + "…";
   // en caso contrario, devuelve el título completo. No alteres el string original.
   // COMPRUEBA: resumirTitulo("JavaScript", 4) devuelve "Java…".
-  return titulo;
+
+  /* if (titulo.length > limite) {
+    return `${titulo.slice(0, limite)}...`;
+  } else return titulo; */
+
+  return titulo.length > limite ? `${titulo.slice(0, limite)}...` : titulo;
 }
+console.log(resumirTitulo(librosIniciales[0].titulo));
 
 function obtenerIniciales(autor) {
   // TODO 09 — Encadenar split, filter, map, at, toUpperCase y join.
@@ -145,8 +151,16 @@ function obtenerIniciales(autor) {
   // OBJETIVO: "  ana   lópez  " → "AL". Para "" devuelve "".
   // PISTA: limpia, separa por espacios, elimina partes vacías, transforma
   // cada palabra en su inicial mayúscula y une sin separador.
-  return "";
+  return autor
+    .trim()
+    .split(" ")
+    .filter((palabra) => palabra !== "")
+    .map((palabra) => palabra.at(0).toUpperCase())
+    .join("");
 }
+
+console.log(obtenerIniciales(librosIniciales[1].autor));
+console.log(obtenerIniciales("  ana   lópez  "));
 
 function analizarTexto(texto) {
   // TODO 10 — startsWith, endsWith e indexOf.
