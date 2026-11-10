@@ -122,12 +122,10 @@ function normalizarLibro(libro) {
   // y descarta etiquetas vacías. Conserva duplicadas si las hay.
   // COMPRUEBA: " JS, , DOM " se convierte en ["js", "dom"].
 
-  etiquetas
+  let arrayEtiquetas = etiquetas
     .split(",")
-    .trim()
-    .toLowerCase()
-    .filter((etiqueta) => etiqueta != " " && etiqueta != null);
-  console.log(etiquetas);
+    .map((etiqueta) => etiqueta.trim().toLowerCase()) // Limpiamos y ponemos en minúsculas cada elemento
+    .filter((etiqueta) => etiqueta !== ""); // Descartamos los vacíos
 
   // TODO 06 — Construir un objeto sin modificar el original.
   // TEORÍA: en { ...objeto, propiedad: nuevoValor }, la última propiedad gana.
@@ -135,18 +133,35 @@ function normalizarLibro(libro) {
   // array, slug y editorial. Conserva id, precio, disponible y detalles.
   // COMPRUEBA: normalizarLibro(librosIniciales[0]) !== librosIniciales[0].
 
+  libro = {
+    ...libro,
+    titulo: tituloOriginal,
+    autor,
+    etiquetas: arrayEtiquetas,
+    slug,
+    editorial,
+  };
+
   return libro;
 }
 
-normalizarLibro(libros[0]);
+console.log(normalizarLibro(libros[0]));
 
 function prepararLibros(datos) {
   // TODO 07 — Transformar una colección con map.
   // TEORÍA: map devuelve un array nuevo, con un resultado por elemento.
   // OBJETIVO: aplica normalizarLibro a cada libro y devuelve el nuevo array.
   // COMPRUEBA: prepararLibros(librosIniciales)[0].etiquetas es un array.
+  datos = datos.map(
+    (libro) => normalizarLibro(libro)
+  )
+
   return datos;
 }
+
+console.log(prepararLibros(librosIniciales)[0].etiquetas);
+console.log(prepararLibros(librosIniciales));
+
 
 function resumirTitulo(titulo, limite = 24) {
   // TODO 08 — length y slice.
@@ -155,8 +170,16 @@ function resumirTitulo(titulo, limite = 24) {
   // OBJETIVO: si supera limite, devuelve los primeros limite caracteres + "…";
   // en caso contrario, devuelve el título completo. No alteres el string original.
   // COMPRUEBA: resumirTitulo("JavaScript", 4) devuelve "Java…".
+
+  if (titulo.length > limite) {
+    titulo = titulo.slice(0, limite) + "...";
+  }
+
   return titulo;
 }
+
+console.log(resumirTitulo("JavaScript", 4))
+
 
 function obtenerIniciales(autor) {
   // TODO 09 — Encadenar split, filter, map, at, toUpperCase y join.
@@ -164,8 +187,46 @@ function obtenerIniciales(autor) {
   // OBJETIVO: "  ana   lópez  " → "AL". Para "" devuelve "".
   // PISTA: limpia, separa por espacios, elimina partes vacías, transforma
   // cada palabra en su inicial mayúscula y une sin separador.
-  return "";
+
+  /*console.log(autor + " - antes de trim()")
+
+  // limpiamos espacios
+  autor = autor.trim();
+  console.log(autor + " - despues de trim()")
+
+  // Separamos por espacios
+  autor = autor.split(" ")
+  console.log(autor)
+
+  // Usamos filter para quitar los elementos vacíos (por si hay espacios dobles)
+  autor = autor.filter(
+    (elemento) => elemento != "")
+  console.log(autor)
+
+  autor = autor.map(
+    (palabra) => palabra.at(0).toUpperCase() 
+  ).join("")
+  console.log(autor)*/
+  
+  if (!autor || autor.trim() =="") {
+    return ""
+  } else {
+    //limpiamos espacios
+    autor = autor.trim();
+
+    // Separamos por espacios
+    autor = autor
+    .split(" ")
+    .filter((elemento) => elemento != "")
+    .map((palabra) => palabra.at(0).toUpperCase())
+    .join("")
+    return autor;
+  }
 }
+
+console.log(obtenerIniciales("  ana   lópez  "));
+console.log(obtenerIniciales(""));
+
 
 function analizarTexto(texto) {
   // TODO 10 — startsWith, endsWith e indexOf.
@@ -175,8 +236,20 @@ function analizarTexto(texto) {
   // una copia del texto sin espacios exteriores y en minúsculas. Comprueba
   // el prefijo "javascript", el sufijo ".pdf" y la posición de "dom".
   // COMPRUEBA: " JavaScript DOM.pdf " produce true, true y 11 respectivamente.
-  return { empiezaPorJS: false, terminaEnPDF: false, posicionDOM: -1 };
+  
+  let limpio = texto.trim().toLowerCase();
+
+  return {
+    empiezaPorJS: limpio.startsWith("javascript"),
+    terminaEnPDF: limpio.endsWith(".pdf"),
+    posicionDOM: limpio.indexOf("dom"),
+  };
+
 }
+
+console.log(analizarTexto(" JavaScript DOM.pdf "))
+
+
 
 function quitarId(libro) {
   // TODO 11 — Rest en objetos.
@@ -186,6 +259,8 @@ function quitarId(libro) {
   // PISTA: extrae id y devuelve el resto. No uses delete sobre libro.
   return {};
 }
+
+
 
 function inspeccionarObjeto(libro) {
   // TODO 12 — Object.keys, Object.values, Object.entries y Object.hasOwn.
