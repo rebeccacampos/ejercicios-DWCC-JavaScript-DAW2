@@ -1,0 +1,67 @@
+/*uso: para darle estructura nativa a la pagina
+
+objetivo del ejercicio que partiendo de esto le demos una estructura
+usando grid de header, nav, content y footer.
+*/
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f9;
+}
+
+.contenedor {
+    display: grid;
+    /* Definimos 2 columnas (la barra lateral más estrecha y el contenido más ancho) */
+    grid-template-columns: 1fr 3fr;
+    /* Definimos 3 filas: Header (auto/1fr), Contenido principal (3fr), Footer (auto/1fr) */
+    grid-template-rows: auto 1fr auto;
+    
+    /* Creamos el mapa visual de dónde va cada elemento */
+    grid-template-areas: 
+        "header header"
+        "nav content"
+        "footer footer";
+
+    height: 400px;
+    width: 500px;
+    border: 1px solid purple;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: white;
+}
+
+.hijo {
+    border: 1px solid aquamarine;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+/* Asignamos cada elemento a su área correspondiente */
+.header {
+    grid-area: header;
+    background-color: #ffcccc;
+}
+
+.nav {
+    grid-area: nav;
+    background-color: #ccffcc;
+}
+
+.content {
+    grid-area: content;
+    background-color: #cce5ff;
+}
+
+.footer {
+    grid-area: footer;
+    background-color: #ffffcc;
+}

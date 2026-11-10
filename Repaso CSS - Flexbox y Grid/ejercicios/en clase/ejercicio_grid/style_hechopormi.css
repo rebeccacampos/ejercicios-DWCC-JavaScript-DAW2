@@ -1,0 +1,64 @@
+/*uso: para darle estructura nativa a la pagina
+
+objetivo del ejercicio que partiendo de esto le demos una estructura
+usando grid de header, nav, content y footer.
+*/
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw; /* que ocupe el 100% del width del view port weith  */
+    height: 100vh;
+}
+
+.contenedor {
+    /*VERSION VER POR QUÉ NO FUNCIONA*/
+    /*
+    flex-direction: row;
+    height: 500px;
+    width: 500px;
+    border: 2px solid purple;
+    gap: 1rem;
+    padding: 1rem;
+
+    display: grid;
+
+    grid-template-areas: 
+    "header header header header"
+    "nav main main main"
+    "nav main main main"
+    "nav main main main"
+    "footer footer footer footer"
+    ";
+    */
+    display: grid;
+    height: 500px;
+    width: 500px;
+    border: 2px solid rgb(144, 125, 164);
+    grid-template-areas:
+        "header header header header"
+        "nav main main main"
+        "nav main main main"
+        "nav main main main"
+        "footer footer footer footer";
+
+}
+
+.hijo {
+    border: 1px solid aquamarine;
+}
+
+.header {
+    grid-area: header;
+}
+
+.nav {
+    grid-area: nav;
+}
+
+.main {grid-area: main;}
+
+.footer {grid-area: footer;}
+
+

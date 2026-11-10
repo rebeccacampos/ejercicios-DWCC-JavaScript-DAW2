@@ -1,0 +1,20 @@
+/* mitico uso: para hacer los navbar*/
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid purple;
+}
+
+.elemento {
+    border: 1px solid blue;
+}
+
+.elemento:nth-child(1) {
+    font-weight: bold;
+}
+
+.elemento:nth-child(5) {
+    margin-left: auto; /*En un contenedor flex, un margen automático absorbe todo el espacio libre restante en esa dirección:*/
+}
+
