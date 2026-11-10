@@ -154,16 +154,13 @@ function prepararLibros(datos) {
   // TEORÍA: map devuelve un array nuevo, con un resultado por elemento.
   // OBJETIVO: aplica normalizarLibro a cada libro y devuelve el nuevo array.
   // COMPRUEBA: prepararLibros(librosIniciales)[0].etiquetas es un array.
-  datos = datos.map(
-    (libro) => normalizarLibro(libro)
-  )
+  datos = datos.map((libro) => normalizarLibro(libro));
 
   return datos;
 }
 
 console.log(prepararLibros(librosIniciales)[0].etiquetas);
 console.log(prepararLibros(librosIniciales));
-
 
 function resumirTitulo(titulo, limite = 24) {
   // TODO 08 — length y slice.
@@ -180,8 +177,7 @@ function resumirTitulo(titulo, limite = 24) {
   return titulo;
 }
 
-console.log(resumirTitulo("JavaScript", 4))
-
+console.log(resumirTitulo("JavaScript", 4));
 
 function obtenerIniciales(autor) {
   // TODO 09 — Encadenar split, filter, map, at, toUpperCase y join.
@@ -209,26 +205,25 @@ function obtenerIniciales(autor) {
     (palabra) => palabra.at(0).toUpperCase() 
   ).join("")
   console.log(autor)*/
-  
-  if (!autor || autor.trim() =="") {
-    return ""
+
+  if (!autor || autor.trim() == "") {
+    return "";
   } else {
     //limpiamos espacios
     autor = autor.trim();
 
     // Separamos por espacios
     autor = autor
-    .split(" ")
-    .filter((elemento) => elemento != "")
-    .map((palabra) => palabra.at(0).toUpperCase())
-    .join("")
+      .split(" ")
+      .filter((elemento) => elemento != "")
+      .map((palabra) => palabra.at(0).toUpperCase())
+      .join("");
     return autor;
   }
 }
 
 console.log(obtenerIniciales("  ana   lópez  "));
 console.log(obtenerIniciales(""));
-
 
 function analizarTexto(texto) {
   // TODO 10 — startsWith, endsWith e indexOf.
@@ -246,11 +241,9 @@ function analizarTexto(texto) {
     terminaEnPDF: limpio.endsWith(".pdf"),
     posicionDOM: limpio.indexOf("dom"),
   };
-
 }
 
-console.log(analizarTexto(" JavaScript DOM.pdf "))
-
+console.log(analizarTexto(" JavaScript DOM.pdf "));
 
 // Bloque 2: Objetos y Arrays (TODO 11 al 20)
 
@@ -261,13 +254,11 @@ function quitarId(libro) {
   // OBJETIVO: devuelve otro objeto sin id, conservando el original intacto.
   // PISTA: extrae id y devuelve el resto. No uses delete sobre libro.
 
-  let {id, ...resto} = libro;
+  let { id, ...resto } = libro;
   return resto;
 }
 
-console.log(quitarId(libros[0]))
-
-
+console.log(quitarId(libros[0]));
 
 function inspeccionarObjeto(libro) {
   // TODO 12 — Object.keys, Object.values, Object.entries y Object.hasOwn.
@@ -276,15 +267,15 @@ function inspeccionarObjeto(libro) {
   // OBJETIVO: devuelve { claves, valores, entradas, tienePrecio }.
   // COMPRUEBA: para { precio: 0 }, obtienes ["precio"], [0], [["precio", 0]], true.
 
-  return { 
-    claves: Object.keys(libro), 
-    valores: Object.values(libro), 
-    entradas: Object.entries(libro), 
-    tienePrecio: Object.hasOwn(libro, "precio") };
+  return {
+    claves: Object.keys(libro),
+    valores: Object.values(libro),
+    entradas: Object.entries(libro),
+    tienePrecio: Object.hasOwn(libro, "precio"),
+  };
 }
 
-console.log(inspeccionarObjeto(libros[1]))
-
+console.log(inspeccionarObjeto(libros[1]));
 
 function obtenerIdioma(libro) {
   // TODO 13 — Acceso opcional ?. y valor alternativo ??.
@@ -296,18 +287,26 @@ function obtenerIdioma(libro) {
   return libro.detalles?.idioma ?? "Sin especificar";
 }
 
-console.log(obtenerIdioma(libros[2]))
-
+console.log(obtenerIdioma(libros[2]));
 
 function explorarCopia(libro) {
   // TODO 14 — Referencias y copia superficial.
-  // OBJETIVO: copia libro con spread y devuelve { copia, esOtroObjeto,
-  // comparteDetalles }. Compara con !== y ===, sin modificar nada.
+  // OBJETIVO: copia libro con spread y devuelve { copia, esOtroObjeto, comparteDetalles }.
+  // Compara con !== y ===, sin modificar nada.
   // COMPRUEBA con el primer libro: esOtroObjeto y comparteDetalles son true.
   // Una copia superficial NO independiza detalles. Para datos compatibles,
   // structuredClone hace copia profunda; no hace falta implementarla aquí.
-  return { copia: null, esOtroObjeto: false, comparteDetalles: false };
+
+  let copia = { ...libro };
+
+  return {
+    copia,
+    esOtroObjeto: libro !== copia,
+    comparteDetalles: libro.detalles === copia.detalles,
+  };
 }
+
+console.log(explorarCopia(libros[2]));
 
 function cambiarPrecio(datos, id, nuevoPrecio) {
   // TODO 15 — Actualización inmutable con map y spread.
@@ -316,8 +315,24 @@ function cambiarPrecio(datos, id, nuevoPrecio) {
   // mantienen su referencia. Si el precio es inválido, devuelve datos sin cambios.
   // PISTA: Number.isFinite, map, comparación por id y spread de objeto.
   // COMPRUEBA: el precio del libro original nunca cambia; 0 es válido.
-  return datos;
+
+  if (Number.isFinite(nuevoPrecio) && nuevoPrecio >= 0) {
+    return datos.map((libro) =>
+      libro.id === id ? { ...libro, precio: nuevoPrecio } : libro,
+    );
+  } else {
+    return datos;
+  }
 }
+
+console.log(libros[1]);
+console.log(cambiarPrecio(libros, "2", 50));
+console.log(cambiarPrecio(libros, "4", 500));
+
+// no existen estos ID por lo que el map recorre y crea un nuevo array igual a datos
+console.log(cambiarPrecio(libros, "-1", 50)); 
+console.log(cambiarPrecio(libros, "0", 80));
+
 
 function buscarPorId(datos, id) {
   // TODO 16 — find frente a filter.
@@ -384,8 +399,6 @@ const elementos = {
   sinResultados: null,
   mensaje: null,
 };
-
-
 
 // Bloque 3: DOM y Eventos (TODO 21 al 32)
 
